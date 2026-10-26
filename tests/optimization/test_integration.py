@@ -455,3 +455,16 @@ class TestEmptyStatesInInterval(TestCase):
     def test_states_in_call_shape(self):
         s = self.problem._states_in_call(0)
         self.assertEqual(s.shape, (2, 1))
+
+
+class SingleShootingZeroEnsembleModel(SingleShootingEnsembleModel):
+    @property
+    def ensemble_size(self):
+        return 0
+
+
+class TestZeroEnsembleSize(TestCase):
+    def test_transcribe_raises_value_error(self):
+        problem = SingleShootingZeroEnsembleModel()
+        with self.assertRaisesRegex(ValueError, "ensemble_size must be >= 1"):
+            problem.transcribe()
